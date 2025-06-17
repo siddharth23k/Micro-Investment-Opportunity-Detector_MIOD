@@ -6,10 +6,10 @@ An interactive web application that simulates and evaluates micro-investment opp
 ---
 
 ## Preview
-![Alt text](image.png)
-![Alt text](image-1.png)
-![Alt text](image-2.png)
-![Alt text](image-3.png)
+![image](https://github.com/user-attachments/assets/dd37d468-9d61-4c47-a5fd-e6efc61bf284)
+![image](https://github.com/user-attachments/assets/86f71665-7dee-4e10-980e-da4af6d08b9a)
+![image](https://github.com/user-attachments/assets/dbee7c03-282d-4970-a1f4-60e126d344f8)
+![image](https://github.com/user-attachments/assets/0cd6a794-60aa-4327-89b6-84324ef11988)
 
 ---
 
