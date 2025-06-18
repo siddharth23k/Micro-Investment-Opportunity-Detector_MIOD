@@ -1,7 +1,7 @@
 # Micro-Investment Opportunity Detector (MIOD)
 
 An interactive web application that simulates and evaluates micro-investment opportunities across various locations using mock business, economic, and social media sentiment data.
-An interactive web application that simulates and evaluates micro-investment opportunities across various locations using mock business, economic, and social media sentiment data. It performs sentiment analysis on social media text using VADER Sentiment Analyzer and utilizes a Random Forest machine learning model to score and classify investment opportunities.
+It performs sentiment analysis on social media text using VADER Sentiment Analyzer and utilizes a Random Forest machine learning model to score and classify investment opportunities.
 
 ---
 
