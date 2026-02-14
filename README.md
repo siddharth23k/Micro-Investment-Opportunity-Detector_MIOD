@@ -1,75 +1,106 @@
-# Micro-Investment Opportunity Detector (MIOD)
+# Micro Investment Opportunity Detector (MIOD)
 
-An interactive web application that simulates and evaluates micro-investment opportunities across various locations using mock business, economic, and social media sentiment data.
-It performs sentiment analysis on social media text using VADER Sentiment Analyzer and utilizes a Random Forest machine learning model to score and classify investment opportunities.
+## Overview
+
+Micro Investment Opportunity Detector is a machine learning based web application that simulates business, social media, and economic data to score investment opportunities across different cities.
+
+The system generates synthetic data, performs sentiment analysis on social media text, engineers structured features, trains a regression model offline, and then serves predictions through an interactive Streamlit interface.
+
+The goal of this project is to demonstrate an end to end ML workflow that includes data generation, feature engineering, model training, model persistence, inference, and explainability.
 
 ---
 
-## Preview
-![image](https://github.com/user-attachments/assets/dd37d468-9d61-4c47-a5fd-e6efc61bf284)
-![image](https://github.com/user-attachments/assets/86f71665-7dee-4e10-980e-da4af6d08b9a)
-![image](https://github.com/user-attachments/assets/dbee7c03-282d-4970-a1f4-60e126d344f8)
-![image](https://github.com/user-attachments/assets/0cd6a794-60aa-4327-89b6-84324ef11988)
+## Project Architecture
+
+The project is structured into clear layers to reflect a realistic ML system.
+
+Data Generation  
+Synthetic business, social media, and macroeconomic data are created using controlled random distributions.
+
+Sentiment Processing  
+Social media text is processed using VADER to generate numerical sentiment scores.
+
+Feature Engineering  
+Sentiment is aggregated at the location level and merged with business and economic data.
+
+Model Training  
+A Random Forest Regressor is trained offline on a generated target variable that simulates real investment opportunity outcomes.
+
+Model Persistence  
+The trained model is saved as a serialized file and later loaded for inference.
+
+Inference Application  
+A Streamlit web application loads the trained model and scores new synthetic businesses based on user-selected location.
+
+Explainability  
+Feature importance from the trained model is displayed to highlight which factors drive investment opportunity scores.
 
 ---
 
 ## Features
 
-- Simulates Business, Economic, and Social Media Data
-- Performs Sentiment Analysis using VADER on Social Media data
-- Calculates Investment Opportunity Scores using a trained Random Forest model
-- Interactive Streamlit Web App Interface
-- Location-specific investment analysis
+Location based investment analysis  
+Sentiment analysis using VADER  
+Random Forest regression model  
+Offline training and saved model artifact  
+Interactive Streamlit interface  
+Feature importance visualization  
+Scrollable and sortable results table  
 
 ---
 
 ## Model Details
 
-### Sentiment Analysis
+Model Type :  
+Random Forest Regressor  
 
-- **Library:** VADER SentimentIntensityAnalyzer
-- **Input:** Simulated social media text data
-- **Output:** Compound Sentiment Score (range -1 to 1)
+Features Used:
+1. sentiment_score  
+2. revenue  
+3. age  
+4. rating  
+5. inflation_rate  
+6. interest_rate  
 
-### Investment Opportunity Scorer
+Target Variable:  
+A synthetic continuous opportunity score between 0 and 100 generated using correlated business and macroeconomic factors with controlled noise.
 
-- **Model:** Random Forest Regressor
-- **Features Used:**  
-  - Business Type
-  - Business Rating
-  - Business Age
-  - Sentiment Score (from social media)
-  - Market Index
-  - Inflation Rate
-  - Interest Rate
-- **Output:** Numerical Opportunity Score + Classified Label
-- **Label Categories:** 
-  - `Excellent`
-  - `Very Good`
-  - `Good`
-  - `Average/Low`
-
-### Data Generation
-
-- Generates randomized mock data for:
-  - Business Data (type, rating, age)
-  - Economic Data (market index, inflation rate, interest rate)
-  - Social Media Data (text sentiment, location)
+Evaluation Metrics:  
+1. Mean Squared Error  
+2. R2 Score  
 
 ---
 
-## Run Locally
+## How the System Works
 
-1.Clone the repository
-git clone https://github.com/siddharth23k/Micro-Investment-Opportunity-Detector.git
-cd Micro-Investment-Opportunity-Detector
-2️. Install dependencies
-pip install -r requirements.txt
-3️. Run the Streamlit app
-streamlit run app.py
+1. Synthetic social media, business, and economic data are generated.  
+2. Sentiment analysis is performed on social media text.  
+3. Sentiment is aggregated by location.  
+4. Business data is merged with sentiment and macroeconomic indicators.  
+5. A regression model is trained offline using train_model.py.  
+6. The trained model is saved to disk.  
+7. The Streamlit app loads the saved model and performs inference only.  
+8. Users select a city and view investment opportunity scores and labels for businesses in that area.  
+9. Feature importance is displayed to explain model behavior.  
 
-## Future Improvements
-- Incorporate real-time social media data scraping(Example: using tweepy)
-- Use real business and economic datasets
-- User authentication & cloud deployment
-- Use neural network for better predictions and give final output of "yes/no" to invest
+---
+
+## Notes
+
+The data in this project is synthetic and meant for demonstration purposes.  
+The model is trained offline and reused for inference to reflect production style ML architecture.  
+Feature importance is extracted from the trained model to improve interpretability.  
+
+---
+
+## Possible Extensions
+
+Add hyperparameter tuning  
+Add SHAP based explainability  
+Replace synthetic data with real API integrations  
+Add time based macroeconomic simulation  
+Deploy as a containerized service  
+
+---
+
+This project demonstrates a clean and modular ML workflow that separates training from inference and emphasizes interpretability and usability.
