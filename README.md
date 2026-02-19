@@ -303,7 +303,7 @@ Response:
 ![Businesses Sorted](screenshots/Sort_business.png)
 
 
-s
+
 ---
 
 ## Engineering Highlights
