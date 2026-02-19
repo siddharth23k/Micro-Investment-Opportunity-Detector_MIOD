@@ -271,19 +271,32 @@ Response:
 ## Screenshots
 
 ### Dashboard Overview
+
 ![Dashboard Overview](screenshots/dashboard_overview.png)
+
+
+
 
 ### Opportunity Distribution
 
 ![Opportunities](screenshots/opportunity_distribution.png)
 
+
+
+
 ### Score Distribution
 
 ![Score Distribution](screenshots/score_distribution.png)
 
+
+
+
 ### Top Investment Opportunities
 
 ![Top Opportunites](screenshots/Top_opportunities.png)
+
+
+
 
 ### View Businesses Data 
 
