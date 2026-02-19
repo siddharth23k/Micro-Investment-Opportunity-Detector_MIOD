@@ -145,7 +145,7 @@ README.md
 ### 1. Clone the Repository
 
 ```
-git clone <your-repo-url>
+git clone <https://github.com/siddharth23k/Micro-Investment-Opportunity-Detector_MIOD>
 cd Micro-Investment-Opportunity-Detector_MIOD
 ```
 
