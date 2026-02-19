@@ -2,7 +2,6 @@ import os
 import logging
 from pathlib import Path 
 import pandas as pd 
-import tweepy
 
 class DataCollector:
     def __init__(self):

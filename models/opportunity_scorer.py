@@ -4,7 +4,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 import pandas as pd
 import joblib
-import logging
 
 
 class OpportunityScorer:
@@ -89,7 +88,7 @@ class OpportunityScorer:
 
     def classify_opportunity(self, score):
 
-        if score >= 80:
+        if score >= 70:
             return "Excellent"
         elif score >= 65:
             return "Very Good"

@@ -2,105 +2,314 @@
 
 ## Overview
 
-Micro Investment Opportunity Detector is a machine learning based web application that simulates business, social media, and economic data to score investment opportunities across different cities.
+Micro Investment Opportunity Detector (MIOD) is a full-stack machine learning system designed to evaluate micro-investment opportunities for small businesses across different locations.
 
-The system generates synthetic data, performs sentiment analysis on social media text, engineers structured features, trains a regression model offline, and then serves predictions through an interactive Streamlit interface.
+The system integrates:
 
-The goal of this project is to demonstrate an end to end ML workflow that includes data generation, feature engineering, model training, model persistence, inference, and explainability.
+- Sentiment analysis using VADER  
+- A Random Forest regression model  
+- A normalized MySQL database  
+- A Flask-based REST API  
+- A Streamlit analytics dashboard  
 
----
+The architecture separates training and inference, persists model artifacts, and retrieves structured data from a relational database using indexed queries.
 
-## Project Architecture
-
-The project is structured into clear layers to reflect a realistic ML system.
-
-Data Generation  
-Synthetic business, social media, and macroeconomic data are created using controlled random distributions.
-
-Sentiment Processing  
-Social media text is processed using VADER to generate numerical sentiment scores.
-
-Feature Engineering  
-Sentiment is aggregated at the location level and merged with business and economic data.
-
-Model Training  
-A Random Forest Regressor is trained offline on a generated target variable that simulates real investment opportunity outcomes.
-
-Model Persistence  
-The trained model is saved as a serialized file and later loaded for inference.
-
-Inference Application  
-A Streamlit web application loads the trained model and scores new synthetic businesses based on user-selected location.
-
-Explainability  
-Feature importance from the trained model is displayed to highlight which factors drive investment opportunity scores.
+This project demonstrates end-to-end ML system design, backend engineering, and data-driven decision workflows.
 
 ---
 
-## Features
+## System Architecture
 
-Location based investment analysis  
-Sentiment analysis using VADER  
-Random Forest regression model  
-Offline training and saved model artifact  
-Interactive Streamlit interface  
-Feature importance visualization  
-Scrollable and sortable results table  
+The system follows a layered architecture:
+
+Streamlit (Frontend Dashboard)  
+→ Flask REST API  
+→ MySQL Database  
+→ Feature Engineering Pipeline  
+→ Random Forest Model (Inference)
+
+Training and inference are handled separately.
+
+- `train_model.py` trains and saves the model artifact.
+- `api.py` loads the saved model and serves predictions.
+- The Streamlit application calls the API for scoring.
+
+---
+
+## Key Features
+
+- Location-based investment opportunity scoring  
+- VADER-based sentiment aggregation at location level  
+- Random Forest regression model with feature importance  
+- Normalized MySQL schema with indexed location queries  
+- Connection pooling for improved database efficiency  
+- Environment-based configuration using `.env`  
+- RESTful API with structured validation and logging  
+- Interactive Streamlit dashboard with visual analytics  
+
+---
+
+## Database Design
+
+The system uses a normalized MySQL schema:
+
+### 1. businesses
+
+Stores structured business-level features.
+
+- business_id (Primary Key)  
+- location (Indexed)  
+- business_type  
+- revenue  
+- age  
+- rating  
+
+### 2. sentiment_aggregates
+
+Stores aggregated sentiment metrics per location.
+
+- location (Primary Key)  
+- sentiment_score  
+- engagement_score  
+
+### 3. economic_indicators
+
+Stores macroeconomic indicators.
+
+- id (Primary Key)  
+- inflation_rate  
+- interest_rate  
+- market_index  
+
+Location is indexed to enable efficient filtering and retrieval.
 
 ---
 
 ## Model Details
 
-Model Type :  
-Random Forest Regressor  
+**Model Type:**  
+Random Forest Regressor
 
-Features Used:
-1. sentiment_score  
-2. revenue  
-3. age  
-4. rating  
-5. inflation_rate  
-6. interest_rate  
+**Features Used:**
 
-Target Variable:  
-A synthetic continuous opportunity score between 0 and 100 generated using correlated business and macroeconomic factors with controlled noise.
+- sentiment_score  
+- revenue  
+- age  
+- rating  
+- inflation_rate  
+- interest_rate  
 
-Evaluation Metrics:  
-1. Mean Squared Error  
-2. R2 Score  
+**Target Variable:**  
+A synthetic opportunity score (0–100) generated using correlated business and macroeconomic factors with controlled noise.
 
----
+**Evaluation Metrics:**
 
-## How the System Works
+- Mean Squared Error (MSE)  
+- R² Score  
 
-1. Synthetic social media, business, and economic data are generated.  
-2. Sentiment analysis is performed on social media text.  
-3. Sentiment is aggregated by location.  
-4. Business data is merged with sentiment and macroeconomic indicators.  
-5. A regression model is trained offline using train_model.py.  
-6. The trained model is saved to disk.  
-7. The Streamlit app loads the saved model and performs inference only.  
-8. Users select a city and view investment opportunity scores and labels for businesses in that area.  
-9. Feature importance is displayed to explain model behavior.  
+The trained model is serialized using `joblib` and loaded by the API for inference.
 
 ---
 
-## Notes
+## Project Structure
 
-The data in this project is synthetic and meant for demonstration purposes.  
-The model is trained offline and reused for inference to reflect production style ML architecture.  
-Feature importance is extracted from the trained model to improve interpretability.  
+```
+models/
+    opportunity_scorer.py
+    sentiment_model.py
+    opportunity_model.pkl
+
+services/
+    data_service.py
+
+utils/
+    feature_pipeline.py
+    mock_data_generator.py
+    data_collector.py
+
+scripts/
+    populate_database.py
+
+api.py
+app.py
+database.py
+train_model.py
+requirements.txt
+README.md
+```
+
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```
+git clone <your-repo-url>
+cd Micro-Investment-Opportunity-Detector_MIOD
+```
+
+### 2. Create Virtual Environment
+
+```
+python -m venv venv
+source venv/bin/activate  # Mac/Linux
+```
+
+### 3. Install Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=miod_db
+```
+
+Do not commit this file to version control.
+
+---
+
+## Database Initialization
+
+1. Create the database in MySQL:
+
+```
+CREATE DATABASE miod_db;
+USE miod_db;
+```
+
+2. Create the required tables (see Database Design section).
+
+3. Populate the database:
+
+```
+python -m scripts.populate_database
+```
+
+---
+
+## Model Training
+
+Train and save the model artifact:
+
+```
+python train_model.py
+```
+
+This creates:
+
+```
+models/opportunity_model.pkl
+```
+
+---
+
+## Running the Application
+
+### 1. Start the Flask API
+
+```
+python api.py
+```
+
+The API will run at:
+
+```
+http://127.0.0.1:5000
+```
+
+You can verify:
+
+```
+http://127.0.0.1:5000/health
+```
+
+### 2. Start the Streamlit Dashboard
+
+In a separate terminal:
+
+```
+streamlit run app.py
+```
+
+The dashboard will call the REST API to fetch scored investment opportunities.
+
+---
+
+## API Endpoint
+
+### POST `/score`
+
+Request:
+
+```
+{
+    "location": "Mumbai"
+}
+```
+
+Response:
+
+```
+{
+    "location": "Mumbai",
+    "total_businesses": 100,
+    "results": [...]
+}
+```
+
+---
+
+## Screenshots
+
+### Dashboard Overview
+
+```
+
+![Dashboard Overview](screenshots/dashboard_overview.png)
+```
+
+### Opportunity Distribution
+
+```
+![Opportunities](screenshots/opportunity_distribution.png)
+![Score Distribution](screenshots/score_distribution.png)
+```
+
+### Top Investment Opportunities
+
+```
+![Top Opportunites](screenshots/Top_opportunities.png)
+![Businesses Sorted](screenshots/Sort_business.png)
+```
+
+---
+
+## Engineering Highlights
+
+- Clean separation of concerns between training and inference  
+- REST API serving serialized ML model  
+- Indexed location queries in MySQL  
+- Connection pooling for scalable DB access  
+- Modular service layer for data retrieval  
+- Environment-based configuration  
+- Interactive frontend consuming backend API  
 
 ---
 
 ## Possible Extensions
 
-Add hyperparameter tuning  
-Add SHAP based explainability  
-Replace synthetic data with real API integrations  
-Add time based macroeconomic simulation  
-Deploy as a containerized service  
-
----
-
-This project demonstrates a clean and modular ML workflow that separates training from inference and emphasizes interpretability and usability.
+- Deploy backend to cloud (Render, Railway, etc.)  
+- Add API authentication  
+- Integrate real external data sources  
+- Add SHAP-based explainability  
+- Containerize using Docker  
+- Add multi-location comparison analytics  

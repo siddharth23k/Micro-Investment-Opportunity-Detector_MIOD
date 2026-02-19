@@ -1,38 +1,35 @@
-from utils.mock_data_generator import (
-    mock_sm_data_generator,
-    mock_business_data_generator,
-    mock_economic_data_generator
-)
-from models.sentiment_model import SentimentModel
-from utils.feature_pipeline import FeaturePipeline
 from models.opportunity_scorer import OpportunityScorer
+from services.data_service import DataService
+from utils.feature_pipeline import FeaturePipeline
 
 
 def main():
 
-    sm_data = mock_sm_data_generator(2000)
-    business_data = mock_business_data_generator(500)
-    econ_data = mock_economic_data_generator()
+    print("Loading data from database...")
 
-    sentiment_model = SentimentModel()
-    sm_data["sentiment_score"] = sentiment_model.analyzer_sentiment(
-        sm_data["text"]
-    )
-
+    data_service = DataService()
     pipeline = FeaturePipeline()
-    sentiment_agg = pipeline.aggregate_sentiment(sm_data)
+
+    # Fetch everything
+    business_data = data_service.fetch_businesses_by_location("Mumbai")
+    sentiment_data = data_service.fetch_sentiment()
+    econ_data = data_service.fetch_economic()
 
     final_data = pipeline.merge_data(
         business_data,
-        sentiment_agg,
+        sentiment_data,
         econ_data
     )
+
     scorer = OpportunityScorer()
+
+    print("Training model...")
     scorer.train(final_data)
-    importance_df = scorer.get_feature_importance()
-    print("\nFeature Importance:")
-    print(importance_df)
-    scorer.save_model()
+
+    print("Saving model...")
+    scorer.save_model("models/opportunity_model.pkl")
+
+    print("Model training complete!")
 
 
 if __name__ == "__main__":

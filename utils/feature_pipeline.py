@@ -28,15 +28,17 @@ class FeaturePipeline:
 
     def merge_data(self, business_data, sentiment_data, econ_data):
 
+        # Merge on location (DB column name)
         merged = business_data.merge(
             sentiment_data,
-            on="b_loc",
+            on="location",
             how="left"
         )
 
-        merged["inflation_rate"] = econ_data["inflation_rate"].iloc[0]
-        merged["interest_rate"] = econ_data["interest_rate"].iloc[0]
+        # Cross join with economic indicators
+        merged["key"] = 1
+        econ_data["key"] = 1
 
-        merged["sentiment_score"].fillna(0, inplace=True)
+        merged = merged.merge(econ_data, on="key").drop("key", axis=1)
 
         return merged
